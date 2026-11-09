@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class 8 Pre-Read</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #faf6ef; --card: #fffdf9; --text: #2e2820; --muted: #6e6455;
+    --accent: #b4532a; --accent-soft: #f8ebe0; --border: #e8dfd0;
+    --code-bg: #f4eee2; --code-text: #2e2820;
+    --ok: #2f7a47; --ok-soft: #e8f2e3; --warn: #94590a; --warn-soft: #fbeed0;
+    --bad: #b3261e; --bad-soft: #fbe6e1; --shadow: 0 1px 3px rgba(80,55,20,.10);
+  }
+  
+    * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 118px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; font-size: 17px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 80px; }
+  header.hero { padding: 38px 0 18px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 6px 0 10px; }
+  .lead { color: var(--muted); font-size: 18px; margin: 0 0 12px; }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .pill { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 8px 0 8px;
+  }
+  .topbar .wrap { padding-bottom: 0; }
+  .progress { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+  .progress > div { height: 100%; width: 0; background: var(--ok); transition: width .3s ease; }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; font-size: 14px; }
+  nav a {
+    text-decoration: none; color: var(--muted); padding: 3px 10px; border-radius: 99px;
+    border: 1px solid var(--border); background: var(--card);
+  }
+  nav a:hover { color: var(--accent); border-color: var(--accent); }
+  nav a.done { color: var(--ok); border-color: var(--ok); }
+  .pct { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 24px; margin: 22px 0; box-shadow: var(--shadow);
+  }
+  section.card h2 { font-size: 25px; margin: 0 0 4px; line-height: 1.25; }
+  .num { color: var(--accent); }
+  h3 { font-size: 19px; margin: 26px 0 6px; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 14px 0; border-left: 5px solid; }
+  .callout.tip { background: var(--accent-soft); border-color: var(--accent); }
+  .callout.warn { background: var(--warn-soft); border-color: var(--warn); }
+  .callout.ok { background: var(--ok-soft); border-color: var(--ok); }
+  .callout strong.t { display: block; margin-bottom: 2px; }
+
+  code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+  .codeblock { position: relative; margin: 12px 0; }
+  .codeblock pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 15px; line-height: 1.5;
+  }
+  .codeblock .label { font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; font-size: 12px; padding: 3px 9px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer;
+  }
+  .copy:hover { color: var(--accent); border-color: var(--accent); }
+  .placeholder {
+    background: var(--warn-soft); color: var(--warn); border: 1px dashed var(--warn);
+    padding: 0 6px; border-radius: 5px; font-weight: 600; white-space: nowrap;
+  }
+
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: var(--accent); }
+  .tablewrap { overflow-x: auto; }
+
+  /* tabs */
+  .tabs { margin: 14px 0; }
+  .tablist { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .tablist button {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 16px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  }
+  .tablist button[aria-selected="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  
+  .tabpanel { display: none; }
+  .tabpanel.active { display: block; }
+  .steps { counter-reset: s; list-style: none; padding-left: 0; }
+  .steps li { counter-increment: s; position: relative; padding-left: 38px; margin: 10px 0; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; display: grid; place-items: center;
+  }
+  
+
+  /* diagrams */
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; margin: 14px 0; }
+  .flow .box {
+    flex: 1 1 150px; border: 2px solid var(--accent); border-radius: 12px; padding: 10px 12px; background: var(--accent-soft);
+  }
+  .flow .box b { display: block; color: var(--accent); font-size: 18px; }
+  .flow .arrow { align-self: center; font-size: 22px; color: var(--accent); }
+
+  .anatomy { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .anatomy span { padding: 6px 10px; border-radius: 8px; font-size: 15px; }
+  .a-prompt { background: #3b4a6b; color: #fff; }
+  .a-cmd { background: #1f7a3a; color: #fff; }
+  .a-out { background: var(--code-bg); border: 1px solid var(--border); color: var(--code-text); }
+  .legend { font-size: 14px; color: var(--muted); }
+
+  .tasks { list-style: none; padding: 0; margin: 10px 0; }
+  .tasks li { padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; margin: 6px 0; display: flex; gap: 10px; align-items: center; background: var(--card); }
+  .tasks li .ck { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: 13px; flex: none; }
+  .tasks li.done { background: var(--ok-soft); border-color: var(--ok); }
+  .tasks li.done .ck { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .btn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+  .hint { min-height: 24px; font-size: 15px; margin: 6px 0; }
+  .hint.good { color: var(--ok); } .hint.bad { color: var(--bad); }
+
+  /* chips / cards */
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .chip {
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 16px; padding: 7px 14px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .readout { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-height: 64px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 680px) { .twocol { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: var(--card); }
+  .panel h4 { margin: 0 0 6px; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .cardgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 680px) { .cardgrid { grid-template-columns: 1fr; } }
+
+  /* quiz */
+  .quiz .q { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 12px 0; background: var(--card); }
+  .quiz .q p.qt { margin: 0 0 8px; font-weight: 600; }
+  .quiz .opt {
+    display: block; width: 100%; text-align: left; font: inherit; font-size: 16px; padding: 8px 12px; margin: 6px 0; cursor: pointer;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text);
+  }
+  .quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .quiz .opt.right { background: var(--ok-soft); border-color: var(--ok); }
+  .quiz .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .quiz .fb { font-size: 15px; margin-top: 6px; }
+  .score { font-size: 20px; font-weight: 700; margin: 10px 0; }
+
+  .donebar { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); flex-wrap: wrap; }
+  .donebtn {
+    font: inherit; font-size: 15px; font-weight: 600; padding: 7px 14px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--ok); color: var(--ok); background: transparent;
+  }
+  .donebtn[aria-pressed="true"] { background: var(--ok); color: #fff; }
+  
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 30px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* ---- additions for Class 2 ---- */
+  /* sorter */
+  .sorter { margin: 14px 0; }
+  .sorter .pool { display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; padding: 10px; border: 1px dashed var(--border); border-radius: 10px; background: var(--card); }
+  .sorter .pool .chip { font-size: 15px; }
+  .sorter .pool .empty { color: var(--ok); font-weight: 600; }
+  .sorter .bins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+  .sorter .bins.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 680px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .sorter .bins, .sorter .bins.two { grid-template-columns: 1fr; } }
+  .sorter .bin {
+    font: inherit; text-align: left; cursor: pointer; border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px;
+    background: var(--card); color: var(--text); min-height: 84px;
+  }
+  .sorter .bin:hover { border-color: var(--accent); }
+  .sorter .bin b { display: block; color: var(--accent); font-size: 16px; margin-bottom: 2px; }
+  .sorter .bin .why { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .sorter .bin .placed { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sorter .bin .placed span { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--ok-soft); border: 1px solid var(--ok); color: var(--ok); border-radius: 6px; padding: 0 6px; }
+  .sorter .bin.flash { border-color: var(--bad); background: var(--bad-soft); }
+  .chip.sel { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+  /* folder explorer */
+  .explorer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px; }
+  @media (max-width: 680px) { .explorer { grid-template-columns: 1fr; } }
+  .explorer .tree button {
+    display: block; width: 100%; text-align: left; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 15px;
+    background: transparent; border: none; padding: 5px 8px; border-radius: 8px; cursor: pointer; color: var(--text);
+  }
+  .explorer .tree button.f { color: var(--accent); font-weight: 600; }
+  .explorer .tree button[aria-pressed="true"] { background: var(--accent-soft); }
+  .explorer .tree .ind { padding-left: 22px; }
+  .explorer .tree .dim { color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; padding: 2px 8px 2px 30px; }
+
+  /* layers */
+  .layers .l { border-radius: 10px; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--border); }
+  .layers .l1 { background: var(--ok-soft); border-color: var(--ok); }
+  .layers .l2 { background: var(--warn-soft); border-color: var(--warn); }
+  .layers .l3 { background: var(--accent-soft); border-color: var(--accent); }
+  .layers b { display: block; }
+
+  .tasks li { align-items: flex-start; }
+  .tasks li .tx { min-width: 0; overflow-wrap: anywhere; }
+  .tasks li .tx code { white-space: normal; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+    <p class="pct" id="pct">Progress: 0 of 8 sections marked done</p>
+    <nav id="nav" aria-label="Sections">
+      <a href="#s1" data-s="s1">1 Welcome</a>
+      <a href="#s2" data-s="s2">2 Big idea</a>
+      <a href="#s3" data-s="s3">3 Tools</a>
+      <a href="#s4" data-s="s4">4 Project</a>
+      <a href="#s5" data-s="s5">5 Measure, profile</a>
+      <a href="#s6" data-s="s6">6 Stream it</a>
+      <a href="#s7" data-s="s7">7 Cap and cost</a>
+      <a href="#s8" data-s="s8">8 Check yourself</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">FDE Module 2 &middot; Pre-read for Class 8</div>
+  <h1>Stream It, Don&rsquo;t Load It (and Measure It)</h1>
+  <p class="lead">Class 7 made every change prove itself. Class 8 asks a different question: does the Workbench still work when the export is ten times bigger? You will measure before you change anything, find the real cost with a profiler, read one row at a time instead of loading the whole file, and put hard limits around the model so a big export cannot run away with time, memory or money. Read this before class, then arrive with your tools ready.</p>
+  <div class="pills">
+    <span class="pill">About 40 minutes</span>
+    <span class="pill">Check your tools</span>
+    <span class="pill">Quick games and a short quiz</span>
+  </div>
+</header>
+
+<!-- ================= 1 WELCOME ================= -->
+<section class="card" id="s1">
+  <h2><span class="num">1.</span> Welcome</h2>
+  <p>In Class 7 your project learned to check itself. It has never been asked to handle a big file. The Operations lead sends a message: <em>&ldquo;Friday&rsquo;s export is 20,000 cases, not 2,000. Will the Workbench still run, how much will the model cost, and how do I know the answers did not change?&rdquo;</em> Today you answer with numbers, not a guess. The rule of the class is: <strong>no number, no change</strong>. Before you edit anything, you say what you expect to measure. After the edit, you measure it again.</p>
+  <p>By the end of class you will have:</p>
+  <div class="cardgrid">
+    <div class="panel">
+      <h4>You will learn to</h4>
+      <ul>
+        <li>Measure <strong>runtime</strong> and <strong>peak memory</strong>, in separate runs</li>
+        <li>Read a <strong>cProfile</strong> report by <code>cumtime</code> and <code>tottime</code>, and watch a <strong>line_profiler</strong> demonstration</li>
+        <li>Use <code>iter</code>, <code>next</code>, <code>StopIteration</code> and write your own <strong>generator</strong> with <code>yield</code></li>
+        <li>Choose between a <strong>comprehension</strong> and a <strong>generator expression</strong>, and spot a hidden list</li>
+        <li>Put a <strong>check, a cache, and a cap</strong> in front of every live model call, and read a <strong>cost report</strong></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h4>You do not need to</h4>
+      <ul>
+        <li>Memorise any command. We type them together in class</li>
+        <li>Install <code>line_profiler</code>. Your instructor runs that demonstration</li>
+        <li>Have an API key. The AI segment uses a stand-in model that needs no key</li>
+        <li>Know anything about databases or multiprocessing. Those are not in this class</li>
+        <li>Pay for anything</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout tip"><strong class="t">How to use this page</strong>
+    Go in order. Section 3 is the one to finish <strong>before</strong> class, because it checks your Class 7 project and builds the big export you will use all session. Click the small interactive boxes, since they help you remember. Press <em>Mark as done</em> at the end of each section. If a step fails, write down what you saw and tell your instructor. Please do not spend more than 15 minutes stuck on any one thing.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s1" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 2 BIG IDEA ================= -->
+<section class="card" id="s2">
+  <h2><span class="num">2.</span> The big idea: measure before you change</h2>
+  <p>A mechanic who hears a rattle does not start unscrewing parts at random. They listen, they run a test, and only then do they pick up a tool. Changing code without measuring is the same kind of guess: you might fix something that was never slow, and never touch the part that actually hurts. Class 8 makes you measure first, every time.</p>
+  <p>The class works through four findings, each one backed by a number, not a feeling. Click each one to see what we found and where we fix it.</p>
+  <div class="chips" id="hideChips">
+    <button class="chip" data-i="0" aria-pressed="false">Peak memory on a 20,000-row export</button>
+    <button class="chip" data-i="1" aria-pressed="false">A live run is far slower than a recorded one</button>
+    <button class="chip" data-i="2" aria-pressed="false">A guess that turns out to be wrong</button>
+    <button class="chip" data-i="3" aria-pressed="false">A model call with no limit on it</button>
+  </div>
+  <div class="readout" id="hideOut" aria-live="polite">Click an item above.</div>
+
+  <h3>The three promises of Class 8</h3>
+  <div class="flow" aria-label="Three promises">
+    <div class="box"><b>1. Measure it</b>Rows, seconds and peak memory, before any edit</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. Stream it</b>One case at a time, not a list of everything</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. Bound the model</b>A check, a cap, and a cost report that never guesses</div>
+  </div>
+
+  <div class="callout warn"><strong class="t">What we will not do in Class 8</strong>
+    No live model calls: a stand-in model replays recorded answers, so everything works on your laptop with no key and no cost. No database, no multiprocessing, no async, and no memory-mapped files; those are discussed as next steps, not built. The Streamlit app is not changed.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s2" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 3 TOOLS ================= -->
+<section class="card" id="s3">
+  <h2><span class="num">3.</span> Check your tools</h2>
+  <p>Most of the setup is in class. Before class you only need to confirm four things. Allow about 15 minutes.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What</th><th>Why it matters</th><th>Ready when</th></tr>
+    <tr><td><strong>Python</strong></td><td>Runs the program. The project is built, tested and checked on Python 3.11</td><td><span class="placeholder">3.11</span></td></tr>
+    <tr><td><strong>Your Class 7 project</strong></td><td>Class 8 builds on it, one file at a time</td><td>It runs, <code>pytest</code> shows <code>154 passed, 1 xfailed</code>, and <code>mypy</code> shows <code>Success: no issues found in 51 source files</code></td></tr>
+    <tr><td><strong>Starter Files for Class 8</strong></td><td>An export writer, a stand-in model and a price table &mdash; three files, nothing else</td><td>Downloaded from the link your instructor shares, and unzipped. Do not copy them over your project yet</td></tr>
+    <tr><td><strong>The big export, built once</strong></td><td>Every measurement in class uses the same 20,000-row export, so the numbers mean something</td><td>You ran the command in 3.2 below and saw the four files appear</td></tr>
+  </table>
+  </div>
+
+  <h3>3.1 Check Python</h3>
+  <p>Open a terminal and run the command for your system. Please use Python 3.11. Python 3.12 and 3.13 run pytest and ruff correctly, but the type check (mypy) stops with an error about a numpy stub on those versions, so the project stays on 3.11.</p>
+  <div class="tabs" data-tabs="pyver">
+    <div class="tablist" role="tablist" aria-label="Operating system">
+      <button role="tab" aria-selected="true" data-tab="win">Windows</button>
+      <button role="tab" aria-selected="false" data-tab="mac">Mac and Linux</button>
+    </div>
+    <div class="tabpanel active" data-panel="win">
+      <div class="codeblock"><div class="label">Windows PowerShell</div><button class="copy">Copy</button><pre>py --version
+# You should see something like: Python 3.11.9</pre></div>
+    </div>
+    <div class="tabpanel" data-panel="mac">
+      <div class="codeblock"><div class="label">macOS or Linux</div><button class="copy">Copy</button><pre>python3 --version
+# You should see something like: Python 3.11.9</pre></div>
+    </div>
+  </div>
+
+  <h3>3.2 Check your Class 7 project, then build the big export</h3>
+  <p>Open your project folder in VS Code and make sure your virtual environment is active. On Windows use <code>py</code> instead of <code>python3</code> if <code>python</code> is not found.</p>
+  <div class="codeblock"><div class="label">From the project root, with the environment active</div><button class="copy">Copy</button><pre>python -m pytest -q
+# Expected: a last line that says 154 passed, 1 xfailed
+
+python -m mypy
+# Expected: Success: no issues found in 51 source files</pre></div>
+  <p>Now unzip the starter pack over your project (it adds three files and changes nothing else) and build the export you will use all session.</p>
+  <div class="codeblock"><div class="label">After copying the Class 8 starter pack in</div><button class="copy">Copy</button><pre>python -m meridian_workbench.make_export --rows 20000 --out scratch/export
+# Expected: wrote 20000 cases, shipments, inventory lines and 6667 notes to scratch/export</pre></div>
+  <p>This takes about a second. It writes four files under <code>scratch/</code>, which is not tracked by Git, so nothing is committed by accident.</p>
+
+  <div class="callout tip"><strong class="t">A note about your own numbers</strong>
+    Every timing in this class depends on the machine it runs on. Your seconds and megabytes will not match your instructor&rsquo;s exactly, and that is fine. What should match is the <em>shape</em> of the change: memory drops by a similar factor, and a live run gets noticeably faster. If a number goes the wrong way, say so &mdash; that is useful information, not a mistake to hide.
+  </div>
+
+  <h3>If something goes wrong</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>What you see</th><th>Likely cause and fix</th></tr>
+    <tr><td>"Python was not found", or the version is 3.10 or lower</td><td>Install Python 3.11 from python.org, then open a new terminal and check again.</td></tr>
+    <tr><td>The tests do not show <code>154 passed, 1 xfailed</code></td><td>Do not fix it alone. Tell your instructor which test failed, and bring the last line of the error.</td></tr>
+    <tr><td><code>ModuleNotFoundError: No module named 'meridian_workbench.make_export'</code></td><td>The starter pack was not unzipped into the project, or was unzipped into the wrong folder. Re-check the three new files are under <code>src/meridian_workbench/</code> and <code>config/</code>.</td></tr>
+    <tr><td>The export command runs but writes to the wrong place</td><td>Run it from the project root, not from inside <code>src/</code> or <code>scratch/</code>.</td></tr>
+    <tr><td><code>mypy</code> fails with an error about a numpy stub</td><td>You are likely on Python 3.12 or 3.13. Switch to 3.11 for this check; pytest and ruff are unaffected.</td></tr>
+  </table>
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s3" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 4 PROJECT ================= -->
+<section class="card" id="s4">
+  <h2><span class="num">4.</span> Where the new pieces go</h2>
+  <p>Class 8 adds a measuring tool, a streaming form of the existing readers and writer, and a small set of controls around the model. Click a folder to see what changes.</p>
+  <div class="explorer">
+    <div class="panel tree" id="treeBox">
+      <button class="f" data-d="root" aria-pressed="true">meridian-workbench/</button>
+      <div class="ind">
+        <button class="f" data-d="src" aria-pressed="false">src/meridian_workbench/</button>
+        <button class="f" data-d="tests" aria-pressed="false">tests/</button>
+        <button class="f" data-d="config" aria-pressed="false">config/</button>
+        <button class="f" data-d="docs" aria-pressed="false">docs/</button>
+        <button data-d="files" aria-pressed="false">pyproject.toml, README.md &hellip;</button>
+      </div>
+    </div>
+    <div class="panel"><h4 id="treeTitle">The whole project</h4><div id="treeText"></div></div>
+  </div>
+  <div class="callout tip"><strong class="t">Picture it</strong>
+    A pipe. Class 6 and 7 built a good, well-tested pipe. Class 8 asks what happens when ten times as much water goes through it at once, and whether the valve at the end (the model) can be told to only let through as much as the budget allows.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s4" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 5 MEASURE, PROFILE ================= -->
+<section class="card" id="s5">
+  <h2><span class="num">5.</span> Measure it, then profile it</h2>
+  <p>&ldquo;It feels slow&rdquo; is not a measurement. We want three numbers for every run: how many rows, how many seconds, and how much memory at the peak. <code>time.perf_counter()</code> gives the seconds. Python&rsquo;s <code>tracemalloc</code> gives the peak memory &mdash; but it also slows the code down a lot, so <strong>time and memory are always measured in separate runs</strong>.</p>
+  <div class="codeblock"><div class="label">The two small functions you will write in class</div><button class="copy">Copy</button><pre>def time_it(work):
+    start = time.perf_counter()
+    result = work()
+    return result, time.perf_counter() - start
+
+def peak_memory_mb(work):
+    tracemalloc.start()
+    result = work()
+    _, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    return result, peak / 1_000_000</pre></div>
+  <p>A measurement is only useful once you know <em>where</em> the time goes. A profiler counts that for you. <strong>cProfile</strong> comes with Python and counts by function; <strong>line_profiler</strong> (an instructor-only demonstration) counts by line inside one function.</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Column</th><th>Meaning</th></tr>
+    <tr><td><code>ncalls</code></td><td>How many times the function ran</td></tr>
+    <tr><td><code>tottime</code></td><td>Time spent inside the function itself only</td></tr>
+    <tr><td><code>cumtime</code></td><td>Time inside the function <em>and</em> everything it calls</td></tr>
+  </table>
+  </div>
+  <div class="callout warn"><strong class="t">A guess the profiler proves wrong</strong>
+    Many people suspect that reading a small JSON fixture file for every note is the slow part of a recorded run. In class, cProfile shows that function costs about two percent of the time. The real cost, in live mode, is a suggestion cache that is read from disk and rewritten to disk after <em>every single answer</em>. Profile before you optimise &mdash; a reasonable guess is often wrong.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s5" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 6 STREAM IT ================= -->
+<section class="card" id="s6">
+  <h2><span class="num">6.</span> One row at a time: iterators and generators</h2>
+  <p>A list holds every item in memory at once. An <strong>iterator</strong> hands over one item when asked, and says &ldquo;no more&rdquo; with <code>StopIteration</code> when it runs out. Most things you already loop over &mdash; a list, a <code>csv.DictReader</code> &mdash; are iterable. A <strong>generator</strong> is the easiest way to write your own: a function with <code>yield</code> in it pauses there, and resumes only when the next item is asked for.</p>
+  <div class="codeblock"><div class="label">A generator pauses at yield</div><button class="copy">Copy</button><pre>def count_up(limit):
+    n = 0
+    while n &lt; limit:
+        print(f"  (making {n})")
+        yield n
+        n += 1
+
+g = count_up(3)
+print("created, nothing printed yet")
+print("got", next(g))   # only now does "(making 0)" print</pre></div>
+  <p>Chain a few generators together and you get a pipeline where only one item is &ldquo;in flight&rdquo; at a time: read a row, parse it, validate it, write it. That is the shape Class 8 gives the Workbench&rsquo;s intake and output.</p>
+
+  <h3>Which form does the job?</h3>
+  <p>Click an item, then click the bin it belongs in.</p>
+  <div class="sorter" id="sortKinds"></div>
+
+  <h3>Before Section 6, or after?</h3>
+  <p>Click an item, then click the bin that says when it is true of the Workbench code.</p>
+  <div class="sorter" id="sortWrap"></div>
+
+  <h3>Five places a list hides</h3>
+  <p>A generator is undone the moment something wraps it in <code>list(...)</code>. Click a place to see what we decided.</p>
+  <div class="chips" id="closeChips">
+    <button class="chip" data-i="0" aria-pressed="false">Reading every CSV row into a list</button>
+    <button class="chip" data-i="1" aria-pressed="false">Keeping every case while checking for duplicates</button>
+    <button class="chip" data-i="2" aria-pressed="false">Building the whole report before writing it</button>
+    <button class="chip" data-i="3" aria-pressed="false">The shipment and inventory lookups</button>
+    <button class="chip" data-i="4" aria-pressed="false">Sorting all 20,000 rows to find the top five</button>
+  </div>
+  <div class="readout" id="closeOut" aria-live="polite">Click an item above.</div>
+
+  <div class="callout tip"><strong class="t">A generator can only be used once</strong>
+    <code>sum(squares)</code> followed by <code>sum(squares)</code> again gives a real number, then <code>0</code>. The first pass used up the generator. This is the single most common surprise with generators, and Class 8 has you hit it on purpose before you rely on the real pipeline.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s6" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 7 CAP AND COST ================= -->
+<section class="card" id="s7">
+  <h2><span class="num">7.</span> Four gates before a model call</h2>
+  <p>In live mode, every flagged case with a note is one model call, and at 20,000 rows that is roughly 1,570 calls. A call costs money and time, and the wrong cached answer can be worse than no answer. So Class 8 puts four gates in front of a call, in order, and only the last one costs anything.</p>
+  <div class="flow" aria-label="Four gates">
+    <div class="box"><b>1. Eligible?</b>Plain Python: is the note even worth asking about?</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>2. Cached?</b>Do we already have a safe answer for this exact note?</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>3. Budget left?</b>Has this run already used its call cap?</div><div class="arrow">&rarr;</div>
+    <div class="box"><b>4. Ask</b>Only now does a model call happen</div>
+  </div>
+  <p>There is a real bug behind gate 2. Before Class 8, a cached answer was keyed only by the note&rsquo;s ID, the model and the prompt version. <strong>If the note text itself was edited but kept the same ID, the Workbench silently reused the old, now-wrong answer.</strong> The fix is a cache key built from a hash of the whole prompt, so an edited note always asks again.</p>
+
+  <h3>Four cases through the gates</h3>
+  <p>Click a case to see which gate stops it, or whether it reaches the model.</p>
+  <div class="chips" id="stackChips">
+    <button class="chip" data-i="0">A three-word note</button>
+    <button class="chip" data-i="1">A real, detailed note</button>
+    <button class="chip" data-i="2">A note that was just edited</button>
+    <button class="chip" data-i="3">The 201st eligible case this run</button>
+  </div>
+  <div class="readout" id="stackOut" aria-live="polite">Click an item above.</div>
+
+  <h3>Cost per usable suggestion, not just cost</h3>
+  <p>A cheaper run is not automatically a better one. If a call cap cuts spend by 90 percent but also leaves most flagged cases with no suggestion at all, &ldquo;cheaper&rdquo; is hiding a quality loss. Class 8 computes <code>cost_per_processed_case</code> <em>and</em> <code>cost_per_usable_suggestion</code>, and compares a rule-only approach against the model on the same small eval set, so a lower call count can never quietly hide a worse answer.</p>
+
+  <h3>Which ratio is which?</h3>
+  <p>Click an item, then click the bin it belongs in.</p>
+  <div class="sorter" id="sortRetry"></div>
+
+  <div class="callout warn"><strong class="t">The prices are an assumption, not a quote</strong>
+    <code>config/prices.toml</code> holds made-up, round numbers with a date attached. The file says so. Any cost figure in this class is the arithmetic done correctly on an assumption &mdash; useful for comparing strategies, not a real bill.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s7" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<!-- ================= 8 CHECK ================= -->
+<section class="card" id="s8">
+  <h2><span class="num">8.</span> Check yourself</h2>
+  <p>Five quick questions. They are not graded. They show you what to look at again. You can retry as often as you like.</p>
+  <div class="quiz" id="finalQuiz"></div>
+  <div class="score" id="finalScore" aria-live="polite"></div>
+
+  <h3>If something breaks: five signs and what they mean</h3>
+  <p>Click a sign you are seeing to see what it usually means.</p>
+  <div class="chips" id="traceChips">
+    <button class="chip" data-i="0">assert 1 == 2 on a call count</button>
+    <button class="chip" data-i="1">ImportError: iter_csv_dicts</button>
+    <button class="chip" data-i="2">Edited-note test fails</button>
+    <button class="chip" data-i="3">skipped_by_cap 1058</button>
+    <button class="chip" data-i="4">Fingerprints: DIFFERENT</button>
+  </div>
+  <div class="readout" id="traceOut" aria-live="polite">Click an item above.</div>
+
+  <h3>Before Class 8: your checklist</h3>
+  <ul class="tasks" id="finalChecks">
+    <li data-check="1"><span class="ck"></span>Python 3.11 is installed, and the version command shows it</li>
+    <li data-check="2"><span class="ck"></span>My Class 7 project shows <code>154 passed, 1 xfailed</code>, and mypy is clean on 51 files</li>
+    <li data-check="3"><span class="ck"></span>I downloaded the Starter Files for Class 8 and unzipped them into my project</li>
+    <li data-check="4"><span class="ck"></span>I ran <code>make_export</code> and have a 20,000-row export under <code>scratch/export</code></li>
+    <li data-check="5"><span class="ck"></span>I can say why time and memory are measured in separate runs</li>
+    <li data-check="6"><span class="ck"></span>I can explain when a generator runs its code: not at creation, but on the first <code>next()</code></li>
+    <li data-check="7"><span class="ck"></span>I know, in order, the four gates a flagged case passes before a model is called</li>
+    <li data-check="8"><span class="ck"></span>I tried the games and answered the quiz</li>
+  </ul>
+  <p class="small muted">Click an item to tick it. Your ticks are saved in this browser only.</p>
+
+  <div class="callout ok"><strong class="t">What happens next</strong>
+    In Class 8 you will build a measuring tool, watch an instructor line_profiler demonstration, write a generator pipeline for intake and output, replace a hidden list with a comprehension or a batch, add a deterministic skip check and a call cap in front of the model, make the cache key safe, write a cost report, compare rule-only against AI-assisted results on the same eval set, and close with a before-and-after finding. Send your instructor a note if any step above did not work.
+  </div>
+  <div class="donebar"><button class="donebtn" data-done="s8" aria-pressed="false">Mark as done</button></div>
+</section>
+
+<footer>FDE Module 2 &middot; Class 8 pre-read</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  /* ---------- tabs ---------- */
+  $$('.tabs').forEach(function (box) {
+    var btns = $$('[role="tab"]', box), panels = $$('.tabpanel', box);
+    function show(name) {
+      btns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === name); });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
+    box._show = show;
+  });
+  try {
+    var plat = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '').toLowerCase();
+    var b1 = $('[data-tabs="pyver"]');
+    if (b1 && b1._show) b1._show(plat.indexOf('win') > -1 ? 'win' : 'mac');
+  } catch (e) { /* ignore */ }
+
+  /* ---------- copy buttons ---------- */
+  $$('.codeblock').forEach(function (cb) {
+    var btn = $('.copy', cb), pre = $('pre', cb);
+    if (!btn || !pre) return;
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      function ok() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); }
+      function fallback() {
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); ok(); } catch (e2) { btn.textContent = 'Select and copy'; }
+        document.body.removeChild(ta);
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(ok, fallback); }
+        else { fallback(); }
+      } catch (e) { fallback(); }
+    });
+  });
+
+  /* ---------- progress (per viewer, saved in this browser only) ---------- */
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem('c8preread') || '{}') || {}; } catch (e) { done = {}; }
+  function save() { try { localStorage.setItem('c8preread', JSON.stringify(done)); } catch (e) { /* ignore */ } }
+  function refresh() {
+    var ids = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8'], n = 0;
+    ids.forEach(function (id) {
+      var on = !!done[id]; if (on) n++;
+      $$('[data-done="' + id + '"]').forEach(function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.textContent = on ? 'Done ✓' : 'Mark as done'; });
+      var a = $('nav a[data-s="' + id + '"]'); if (a) a.classList.toggle('done', on);
+    });
+    $('#bar').style.width = Math.round(n / ids.length * 100) + '%';
+    $('#pct').textContent = 'Progress: ' + n + ' of ' + ids.length + ' sections marked done';
+  }
+  $$('[data-done]').forEach(function (b) {
+    b.addEventListener('click', function () { done[b.dataset.done] = !done[b.dataset.done]; save(); refresh(); });
+  });
+  try { refresh(); } catch (e) { /* ignore */ }
+
+  /* ---------- generic chip readout ---------- */
+  function chipReadout(chipSel, outSel, data, fixLabel) {
+    $$(chipSel).forEach(function (c) {
+      c.addEventListener('click', function () {
+        $$(chipSel).forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        c.setAttribute('aria-pressed', 'true');
+        var h = data[+c.dataset.i];
+        $(outSel).innerHTML = '<strong>' + h[0] + '</strong><br>' + h[1] + '<br><strong style="color:var(--ok)">' + fixLabel + '</strong> ' + h[2];
+      });
+    });
+  }
+  chipReadout('#hideChips .chip', '#hideOut', [["Peak memory on a 20,000-row export", "The Class 7 code holds every case, every result and the whole report in memory at once. Measured: 87.8 MB recorded, 88.0 MB live, and it grows in a straight line with the number of rows (about 4.4 MB per 1,000).", "Cases, results and the output report are streamed one at a time instead of built as lists. Measured after: about 22 MB, roughly four times lower, though memory still grows with rows because the lookup tables stay in memory on purpose."], ["A live run is far slower than a recorded one", "Recorded: about 1.4 seconds. Live, with a stand-in model that answers instantly: about 5.5 seconds. Nothing in the model call itself is slow, so something around it is expensive.", "A line_profiler demonstration shows a suggestion cache being read from disk and rewritten to disk after every single answer: about 89 percent of the time inside that function. Reading once and saving in batches fixes it."], ["A guess that turns out to be wrong", "It is tempting to suspect <code>read_recorded</code>, which reads a small JSON fixture file for every note, of being the slow part of a recorded run.", "cProfile shows that function costs about 2 percent of a 3.5-second run. The real cost, in recorded mode, is building a dictionary for every record just to validate it. We profile before we optimise."], ["A model call with no limit on it", "At 20,000 rows, about 1,572 flagged cases have a note. With no limit, that is 1,572 live model calls every single run, however small the eval budget actually is.", "A deterministic skip check, then a cache with a safe key, then a hard cap on calls per run. A run can be told: no more than 200 calls, and a note under three words is never even asked."]], 'The fix:');
+
+  /* ---------- section 4: folder explorer ---------- */
+  var DIRS = {"root": ["The whole project", "The Class 7 layout stays. Class 8 adds a measuring tool, a streaming form of existing readers and writer, and controls around the model. Click a folder to see what changes."], "src": ["src/meridian_workbench/", "Several new files: <code>measure.py</code> and <code>bench.py</code> (measuring), <code>streams.py</code> (<code>batched()</code>), <code>eligibility.py</code> (the skip check), <code>cost.py</code> and <code>compare.py</code> (cost and the rule-only vs AI-assisted comparison). The existing <code>fileio.py</code>, <code>loaders.py</code>, <code>reconcile.py</code>, <code>context.py</code>, <code>ai_client.py</code> and <code>pipeline.py</code> each gain a streaming form, kept alongside the old list form so every old caller still works."], "tests": ["tests/", "Two new files, written mostly in class: <code>test_streaming.py</code> (the generator forms give the same answers as the list forms) and <code>test_cost_controls.py</code> (the skip check, the cap, and the cache-key fix). At the end there are 187 checks, and one that is expected to fail."], "config": ["config/", "<code>settings.toml</code> gains a call cap and a minimum note length for live mode, and a batch size for how often the cache is saved. <code>prices.toml</code> is new: a dated, made-up price table, given in your starter pack."], "docs": ["docs/", "<code>measuring.md</code> is new. It is a short guide to how to measure a run, and what changed in Class 8 and what it cost."], "files": ["pyproject.toml and README.md", "The version moves to 0.7.0, and the README gets a new section describing the measuring tool, the streaming change, the model controls and the cost report."]};
+  function showDir(k) {
+    var d = DIRS[k];
+    $('#treeTitle').textContent = d[0];
+    $('#treeText').innerHTML = '<p style="margin:0">' + d[1] + '</p>';
+  }
+  $$('#treeBox button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('#treeBox button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      showDir(b.dataset.d);
+    });
+  });
+  showDir('root');
+
+  /* ---------- sorter ---------- */
+  function sorter(el, bins, items, doneMsg) {
+    var sel = null, left = items.length, wrong = 0;
+    var pool = document.createElement('div'); pool.className = 'pool';
+    var hint = document.createElement('p'); hint.className = 'hint';
+    var grid = document.createElement('div'); grid.className = 'bins';
+    var chips = [];
+    items.forEach(function (it) {
+      var c = document.createElement('button'); c.className = 'chip'; c.textContent = it.t; c.setAttribute('aria-pressed', 'false');
+      c.addEventListener('click', function () {
+        chips.forEach(function (x) { x.classList.remove('sel'); x.setAttribute('aria-pressed', 'false'); });
+        sel = it; c.classList.add('sel'); c.setAttribute('aria-pressed', 'true');
+        hint.className = 'hint'; hint.textContent = 'Now click the bin for this item.';
+      });
+      it.chip = c; chips.push(c); pool.appendChild(c);
+    });
+    bins.forEach(function (b) {
+      var d = document.createElement('button'); d.className = 'bin';
+      d.innerHTML = '<b>' + esc(b.label) + '</b><span class="why">' + esc(b.sub || '') + '</span><span class="placed"></span>';
+      d.addEventListener('click', function () {
+        if (!sel) { hint.className = 'hint'; hint.textContent = 'Click an item first, then a bin.'; return; }
+        var it = sel;
+        if (it.bin === b.k) {
+          var s = document.createElement('span'); s.textContent = it.t; $('.placed', d).appendChild(s);
+          pool.removeChild(it.chip); sel = null; left--;
+          hint.className = 'hint good'; hint.textContent = 'Correct. ' + it.why;
+          if (!left) {
+            var e = document.createElement('span'); e.className = 'empty'; e.textContent = 'All sorted.'; pool.appendChild(e);
+            hint.textContent = (wrong === 0 ? 'Perfect, with no mistakes. ' : 'All sorted, with ' + wrong + ' wrong ' + (wrong === 1 ? 'try' : 'tries') + '. ') + (doneMsg || '');
+          }
+        } else {
+          wrong++; d.classList.add('flash'); setTimeout(function () { d.classList.remove('flash'); }, 500);
+          hint.className = 'hint bad'; hint.textContent = 'Not quite. ' + (it.hint || 'Think about what went wrong.');
+        }
+      });
+      grid.appendChild(d);
+    });
+    el.appendChild(pool); el.appendChild(hint); el.appendChild(grid);
+  }
+  sorter($('#sortKinds'), [{"k": "list", "label": "List / comprehension", "sub": "builds everything now"}, {"k": "gen", "label": "Generator / expression", "sub": "builds nothing until asked"}], [{"t": "[n * n for n in range(1000000)]", "bin": "list", "why": "Square brackets build the whole list right away, all one million numbers.", "hint": "Does it need every item held at once?"}, {"t": "(n * n for n in range(1000000))", "bin": "gen", "why": "Round brackets build a generator expression: 208 bytes, whatever the range, because nothing is computed until asked.", "hint": "Round brackets, not square ones."}, {"t": "sum(1 for row in reader if row[\"status\"] == \"SHIPPED\")", "bin": "gen", "why": "The generator expression feeds sum() one value at a time. Nothing is ever held as a list.", "hint": "Is a list actually built, or just a running total?"}, {"t": "A function with yield inside it, called once per note", "bin": "gen", "why": "A function with yield is a generator function. Calling it builds a generator; the body runs only on the first next().", "hint": "Does the word yield appear?"}, {"t": "{r[\"order_id\"]: r[\"case_id\"] for r in rows}", "bin": "list", "why": "This is a dict comprehension: it builds the whole dictionary now, because you need it for lookups later.", "hint": "Will you look things up in it more than once?"}, {"t": "itertools.islice(iter_csv_dicts(path), 5000)", "bin": "gen", "why": "islice takes the next N items from an iterator without ever building a list of them.", "hint": "Does it pull a bounded slice from a stream?"}], "A list or comprehension holds everything now. A generator or generator expression holds nothing until the next item is asked for.");
+
+  chipReadout('#closeChips .chip', '#closeOut', [["Peak memory (recorded)", "87.8 MB before, about 22 MB after.", "Roughly four times lower. Still grows with rows, because the lookup tables are kept."], ["Peak memory (live)", "88.0 MB before, about 22 MB after.", "The model reply itself was never the memory problem."], ["Live runtime", "About 5.5 seconds before.", "Under 2 seconds with the cache fix, for the same 1,572 calls."], ["Model calls, no controls", "1,572, every run, however small the budget.", "With the default cap and skip check: 200 calls, 314 notes skipped for free, 1,058 cases left without a suggestion."], ["Trusted output files", "The sample batch output is three fingerprints.", "Unchanged: SAME as before, on the sample batch and on a byte-for-byte 2,000-row comparison."]], 'The result:');
+
+  /* ---------- section 6 ---------- */
+  sorter($('#sortWrap'), [{"k": "bef", "label": "Before Section 6", "sub": "the old, list-based code"}, {"k": "aft", "label": "After Section 6", "sub": "the streaming code"}], [{"t": "Every case is held in one Python list while duplicates are checked", "bin": "bef", "why": "The old apply_duplicate_policy takes a list and returns a list; everything is in memory for the whole check.", "hint": "Is anything called with a full list of cases?"}, {"t": "A 20,000-row export halts at the quality gate, refusing 75 percent of rows", "bin": "bef", "why": "The ID-width contract only allowed four digits, and a bigger export needs five. This is fixed in Section 1, before the streaming work even starts.", "hint": "Is this about the shape of an ID, or about memory?"}, {"t": "The report is written one result at a time, as it is produced", "bin": "aft", "why": "write_json_array streams the output, byte-for-byte identical to building the whole list first and calling json.dumps.", "hint": "Is the whole report held in memory before writing?"}, {"t": "Cases are read from disk twice: once to count and gate, once to build results", "bin": "aft", "why": "This is the one number that gets slightly worse on purpose: the gate must see every row before any model call can happen, so a second read buys the early halt.", "hint": "Did the streaming code add a cost anywhere?"}, {"t": "asdict() copies every field of every record just to validate it", "bin": "bef", "why": "dataclasses.asdict is a deep copy. Our records are flat and cannot change, so a cheap shallow version (flat()) does the same job for less.", "hint": "Is this before or after the fix?"}, {"t": "The three output fingerprints are SAME as before, on every comparison", "bin": "aft", "why": "This holds in both directions: it is the proof that the streaming work changed how the Workbench reads and writes, not what it outputs.", "hint": "This is the whole point of Section 6."}], 'Everything the gate needs to know is read in one pass, with no case kept. A second pass builds and writes results, one at a time.');
+
+  chipReadout('#stackChips .chip', '#stackOut', [["A note with two words, &ldquo;see previous&rdquo;", "Shorter than the minimum of three words.", "<strong>Skipped</strong> before any call: status ABSTAINED, mode \"skipped\", zero tokens."], ["A properly described note, nine words long", "Long enough to be worth asking about.", "Goes on to the cache check, then the model if not cached."], ["A note whose exact text was edited since it was last cached", "Before Class 8: the old key (note ID, model, prompt version) still matched.", "Before: <strong>wrongly reused</strong> the old answer. After: the key includes a hash of the whole prompt, so an edited note <strong>asks again</strong>."], ["The 201st call in a run with a cap of 200", "Every earlier gate was passed; only the cap stops it.", "<strong>UNAVAILABLE</strong>, with the fixed reason &ldquo;not asked: the call cap for this run was reached.&rdquo; Not an invented answer, not a refusal."]], 'The result:');
+
+  /* ---------- section 7 ---------- */
+  sorter($('#sortRetry'), [{"k": "cost", "label": "Cost per processed case", "sub": "spend divided by every case run"}, {"k": "usable", "label": "Cost per usable suggestion", "sub": "spend divided by answers you can actually use"}], [{"t": "Total model spend divided by 19,794 processed cases", "bin": "cost", "why": "This is the headline number a manager often asks for first, and it can mislead on its own.", "hint": "Is the denominator every case, or only the useful answers?"}, {"t": "Total model spend divided by 149 suggestions with status OK", "bin": "usable", "why": "This is the number that cannot be gamed by simply asking the model less. If you ask fewer questions, you get fewer usable answers too, so this ratio stays honest.", "hint": "Is the denominator the count of useful results?"}, {"t": "A cap of 200 drops this number by about 8 times versus a cap of 0", "bin": "cost", "why": "Cost per processed case falls sharply under a cap, because the denominator (every case) does not shrink even though far fewer calls are made.", "hint": "Which ratio reacts most to a smaller cap?"}, {"t": "This number only falls a little under the same cap, from about 0.00065 to 0.00051", "bin": "usable", "why": "Fewer calls also means fewer usable suggestions, so this ratio is much steadier. A reader who only sees the cost-per-case number is being misled about how much was actually achieved.", "hint": "Which ratio stays closer to constant?"}], 'Cost per case can fall just because you asked less. Cost per usable suggestion cannot be gamed the same way.');
+
+  chipReadout('#traceChips .chip', '#traceOut', [["assert 1 == 2 on a call count", "A cache-reuse test expected one call and the fake model saw two.", "Usually means the cache key is not matching an answer it should, so the same note is asked again. Check what changed about the key."], ["ImportError: cannot import name 'iter_csv_dicts'", "A streaming test was written before the streaming function existed.", "This is the right kind of red: the test fails for the right reason. Write the function, then watch it pass."], ["assert len(prompts) == 1, got 2 (an edited-note test)", "The stale cache bug: an edited note should ask again, and it did not, or vice versa.", "Check the cache key includes a hash of the prompt text, not just the note ID."], ["model calls 200, skipped_by_cap 1058", "Not a failure. This is the cost report doing its job.", "Read it alongside the compare table: does a cap this tight lose quality on the eval set, or not?"], ["Fingerprints: DIFFERENT from before", "A trusted output changed when it should not have.", "Stop. Find which file changed and why, before going any further. This should never happen from the streaming work alone."]], 'What it means:');
+
+  /* ---------- quiz ---------- */
+  function quiz(el, items, scoreEl) {
+    var answered = 0, right = 0;
+    items.forEach(function (it, qi) {
+      var q = document.createElement('div'); q.className = 'q';
+      var p = document.createElement('p'); p.className = 'qt'; p.textContent = (qi + 1) + '. ' + it.q; q.appendChild(p);
+      var fb = document.createElement('div'); fb.className = 'fb';
+      var btns = [];
+      it.o.forEach(function (txt, oi) {
+        var b = document.createElement('button'); b.className = 'opt'; b.textContent = txt; btns.push(b);
+        b.addEventListener('click', function () {
+          if (btns.some(function (x) { return x.disabled; })) return;
+          btns.forEach(function (x) { x.disabled = true; });
+          answered++;
+          if (oi === it.a) { b.classList.add('right'); right++; fb.textContent = 'Correct. ' + it.e; fb.style.color = 'var(--ok)'; }
+          else { b.classList.add('wrong'); btns[it.a].classList.add('right'); fb.textContent = 'Not quite. ' + it.e; fb.style.color = 'var(--bad)'; }
+          if (scoreEl && answered === items.length) {
+            scoreEl.textContent = 'You got ' + right + ' of ' + items.length + '. ' + (right === items.length ? 'Great work.' : 'Re-read the sections for any you missed, then reload the page to try again.');
+          }
+        });
+        q.appendChild(b);
+      });
+      q.appendChild(fb); el.appendChild(q);
+    });
+  }
+  quiz($('#finalQuiz'), [{"q": "Why are runtime and peak memory always measured in two separate runs, never one?", "o": ["Python cannot measure both at once", "tracemalloc slows the code down a lot, so the seconds from that run are not real seconds", "Memory can only be measured after the program ends", "It is faster to run the program twice"], "a": 1, "e": "tracemalloc records every allocation, which costs real time. A seconds figure taken from a tracemalloc run is inflated and not comparable to an ordinary run."}, {"q": "cProfile shows a function with tottime 0.07s and cumtime 3.9s. What does the gap tell you?", "o": ["The profiler made a mistake", "The function itself is cheap; almost all the time is spent in functions it calls", "The function was called 3.9 times", "Nothing; the two numbers are unrelated"], "a": 1, "e": "tottime is time inside the function only. cumtime includes everything it calls. A small tottime with a large cumtime means: look at what this function calls, not the function itself."}, {"q": "You create a generator g = count_up(3) but call no methods on it yet. How many lines of the function body have run?", "o": ["All of them, up to the end", "None; the body only starts running on the first next()", "Just the first line", "It depends on the size of the range"], "a": 1, "e": "Calling a generator function builds a generator object and runs nothing. The body runs, up to the first yield, only when an item is actually asked for."}, {"q": "A cache key for a model answer is built from the note ID, the model name and the prompt version. The note text is then edited, with the ID unchanged. What happens with the OLD key design?", "o": ["The system asks the model again automatically", "The old (and now wrong) cached answer is silently reused", "An error is raised", "The cache is cleared"], "a": 1, "e": "Without the note text (or a hash of the full prompt) in the key, an edited note with the same ID still matches the old cache entry, and the stale answer is returned as if it were current."}, {"q": "A call cap cuts cost per processed case by 8 times, but cost per usable suggestion only falls a little. What is the honest reading?", "o": ["The cap is a pure win: cost fell a lot", "The cap mostly means fewer answers were produced, not that each answer got cheaper to make", "There is a bug in the cost report", "Cost per usable suggestion should have fallen by 8 times too"], "a": 1, "e": "Cost per processed case shrinks because the denominator (every case) stays fixed while spend drops. Cost per usable suggestion is steadier because fewer calls also means fewer usable answers, which is the quality loss a single cost number can hide."}], $('#finalScore'));
+
+  /* checklist: tick, and remember in this browser */
+  var checkDone = {};
+  try { checkDone = JSON.parse(localStorage.getItem('c8preread-checks') || '{}') || {}; } catch (e) { checkDone = {}; }
+  $$('#finalChecks li').forEach(function (li) {
+    var ck = $('.ck', li);
+    var tx = document.createElement('span'); tx.className = 'tx';
+    while (ck.nextSibling) tx.appendChild(ck.nextSibling);
+    li.appendChild(tx);
+    li.style.cursor = 'pointer';
+    function paint(on) { li.classList.toggle('done', on); ck.textContent = on ? '✓' : ''; }
+    paint(!!checkDone[li.dataset.check]);
+    li.addEventListener('click', function () {
+      checkDone[li.dataset.check] = !checkDone[li.dataset.check];
+      paint(!!checkDone[li.dataset.check]);
+      try { localStorage.setItem('c8preread-checks', JSON.stringify(checkDone)); } catch (e) { /* ignore */ }
+    });
+  });
+
+  /* nav highlight while scrolling */
+  try {
+    var secs = $$('section.card'), links = $$('nav a');
+    window.addEventListener('scroll', function () {
+      var cur = secs[0].id;
+      secs.forEach(function (s) { if (s.getBoundingClientRect().top < 160) cur = s.id; });
+      links.forEach(function (a) { a.style.fontWeight = a.dataset.s === cur ? '700' : '400'; });
+    }, { passive: true });
+  } catch (e) { /* ignore */ }
+})();
+</script>
+</body>
+</html>
